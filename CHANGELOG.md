@@ -29,11 +29,12 @@
 - BREAKING CHANGE: Multiple searches are combined as _AND_ instead of _OR_
 - Introduces `count_estimate` for improved performance on counting large tables
 - Fixes a bug where joining wasn’t persisting and the SQL ON condition was backwards
-
-## 0.2.3 _(January 11, 2017)_
 - Allow for dynamic nested relations with smart outer joins
 
 ## 0.2.2 _(January 09, 2017)_
+- Allow for dynamic nested relations with smarter outer-joins
+
+## 0.2.0 _(January 06, 2017)_
 - Handle column specific searching as well as "global" (default) searching
 - Can search on integer columns
 
