@@ -2,7 +2,7 @@
 [![Build Status ](https://travis-ci.org/TwilightCoders/data_tables-responder.svg)](https://travis-ci.org/TwilightCoders/data_tables-responder)
 [![Code Climate ](https://api.codeclimate.com/v1/badges/5032242cc2798697105a/maintainability)](https://codeclimate.com/github/TwilightCoders/data_tables-responder/maintainability)
 [![Test Coverage](https://codeclimate.com/github/TwilightCoders/data_tables-responder/badges/coverage.svg)](https://codeclimate.com/github/TwilightCoders/data_tables-responder/coverage)
-[![Dependencies ](https://gemnasium.com/badges/github.com/TwilightCoders/data_tables-responder.svg)](https://gemnasium.com/github.com/TwilightCoders/data_tables-responder)
+[![Dependencies ](https://badges.depfu.com/badges/4aa9ef5bfb9736eab3536af695db729e/overview.svg)](https://depfu.com/github/TwilightCoders/data_tables-responder)
 
 # DataTables::Responder
 
