@@ -38,6 +38,3 @@ module DataTables
     end
   end
 end
-
-# Register adapter manually (due to namespacing)
-ActiveModelSerializers::Adapter.register(:dt, DataTables::ActiveModelSerializers::Adapter)

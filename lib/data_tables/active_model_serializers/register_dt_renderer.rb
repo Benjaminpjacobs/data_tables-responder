@@ -49,8 +49,3 @@ module DataTables
   end
 end
 
-DataTables::ActiveModelSerializers.install
-
-ActiveSupport.on_load(:action_controller) do
-  include DataTables::ActiveModelSerializers::ControllerSupport
-end
