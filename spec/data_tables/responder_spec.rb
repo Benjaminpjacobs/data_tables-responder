@@ -10,6 +10,9 @@ describe DataTables::Responder do
     comment = Comment.create(post: post, user: user)
   end
 
+  let!(:p_at) { Post.arel_table }
+  let!(:u_at) { User.arel_table }
+
   let!(:simple_params) do
     HashWithIndifferentAccess.new({
       "columns": [
@@ -192,10 +195,11 @@ describe DataTables::Responder do
 
   it 'responds when given activerecord::base model' do
     response = DataTables::Responder.respond(Comment, complex_params)
-      response_sql = response.to_sql
+    response_sql = response.to_sql
+    expected_sql = Comment.joins(post: :user).where(u_at[:email].matches("%foo@bar.baz%")).order(u_at[:email].asc).limit(10).offset(0).to_sql
 
-      expect(response.count).to eq(1)
-      expect(response_sql).to include('"comments".* FROM "comments"')
+    expect(response.count).to eq(1)
+    expect(response_sql).to eq(expected_sql)
   end
 
   describe 'handles complex' do
@@ -203,37 +207,30 @@ describe DataTables::Responder do
 
       response = DataTables::Responder.respond(Comment.all, complex_params)
       response_sql = response.to_sql
+      expected_sql = Comment.joins(post: :user).where(u_at[:email].matches("%foo@bar.baz%")).order(u_at[:email].asc).limit(10).offset(0).to_sql
 
       expect(response.count).to eq(1)
-      expect(response_sql).to include('"comments".* FROM "comments"')
-      expect(response_sql).to include('INNER JOIN "posts" ON "posts"."id" = "comments"."post_id"')
-      expect(response_sql).to include('JOIN "users" ON "users"."id" = "posts"."user_id"')
-      expect(response_sql).to include('WHERE ("users"."email" ILIKE \'%foo@bar.baz%\')')
-      expect(response_sql).to include('ORDER BY "users"."email" ASC')
-      expect(response_sql).to include('LIMIT 10 OFFSET 0')
+      expect(response_sql).to eq(expected_sql)
     end
 
     it 'nested requests with bad data' do
 
       response = DataTables::Responder.respond(Comment.all, complex_bad_params)
       response_sql = response.to_sql
+      expected_sql = Comment.joins(:post).limit(10).offset(0).to_sql
 
       expect(response.count).to eq(1)
-      expect(response_sql).to include('"comments".* FROM "comments"')
-      expect(response_sql).to include('LIMIT 10 OFFSET 0')
+      expect(response_sql).to eq(expected_sql)
     end
 
     it 'nested requests when sorting without searching' do
 
       response = DataTables::Responder.respond(Comment.all, complex_params_with_order_and_empty_search)
       response_sql = response.to_sql
+      expected_sql = Comment.joins(post: :user).order(u_at[:email].asc).limit(10).offset(0).to_sql
 
       expect(response.count).to eq(1)
-      expect(response_sql).to include('"comments".* FROM "comments"')
-      expect(response_sql).to include('INNER JOIN "posts" ON "posts"."id" = "comments"."post_id"')
-      expect(response_sql).to include('JOIN "users" ON "users"."id" = "posts"."user_id"')
-      expect(response_sql).to include('ORDER BY "users"."email" ASC')
-      expect(response_sql).to include('LIMIT 10 OFFSET 0')
+      expect(response_sql).to eq(expected_sql)
     end
   end
 
@@ -242,22 +239,20 @@ describe DataTables::Responder do
 
       response = DataTables::Responder.respond(Post.all, simple_params)
       response_sql = response.to_sql
+      expected_sql = Post.where(p_at[:title].matches("%foo%")).order(p_at[:title].asc).limit(10).offset(0).to_sql
 
       expect(response.count).to eq(1)
-      expect(response_sql).to include('WHERE ("posts"."title" ILIKE \'%foo%\')')
-      expect(response_sql).to include('ORDER BY "posts"."title" ASC')
-      expect(response_sql).to include('LIMIT 10 OFFSET 0')
+      expect(response_sql).to eq(expected_sql)
     end
 
     it 'nested requests with bad data' do
 
       response = DataTables::Responder.respond(Post.all, simple_bad_params)
       response_sql = response.to_sql
+      expected_sql = Post.all.limit(10).offset(0).to_sql
 
       expect(response.count).to eq(1)
-      expect(response_sql).to include('"posts".* FROM "posts"')
-      expect(response_sql).to_not include('"posts"."missing_column"')
-      expect(response_sql).to include('LIMIT 10 OFFSET 0')
+      expect(response_sql).to eq(expected_sql)
     end
   end
 
