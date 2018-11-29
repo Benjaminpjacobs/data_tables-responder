@@ -1,5 +1,5 @@
 module DataTables
   module Responder
-    VERSION = '0.5.0rc1'
+    VERSION = '0.4.3'
   end
 end
