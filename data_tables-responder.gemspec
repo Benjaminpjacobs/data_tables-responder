@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib', 'spec']
 
   rails_versions = ['>= 4.1', '< 6']
-  spec.required_ruby_version = '>= 2.1'
+  spec.required_ruby_version = '>= 2.3'
 
   spec.add_runtime_dependency 'active_model_serializers', '~> 0'
   spec.add_runtime_dependency 'quick_count', ['>= 0.0.3', '< 0.1.0']
